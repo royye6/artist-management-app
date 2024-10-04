@@ -20,8 +20,9 @@ model User {
   username   String   @unique @db.VarChar(255)
   email      String   @unique @db.VarChar(255)
   password   String
+  image      String?
   created_at DateTime @default(now()) @db.Timestamp(6)
-  updated_at DateTime @updatedAt
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
 }
 
 model RecordLabel {
@@ -46,54 +47,56 @@ model Artist {
   image                 String?
   genre                 String?
   albums                Album?
-  contract              Contract[]
+  tracks                Track[]
+  contract              Contract?
   music_tours           Tour[]
-  transactions          Finance[]
-  accolades             Accolade[]
+  transactions          Finance?
+  accolades             Accolade?
   social_media_profiles SocialMedia[]
   record_label          RecordLabel   @relation(fields: [record_label_id], references: [id])
-  record_label_id       Int
+  record_label_id       Int           @unique
   created_at            DateTime      @default(now()) @db.Timestamp(6)
-  updated_at            DateTime      @updatedAt
+  updated_at            DateTime?      @updatedAt @db.Timestamp(6)
 }
 
 model Album {
   id              Int         @id @default(autoincrement())
   title           String
-  release_date    DateTime
-  cover_art       String
+  release_date    DateTime    @db.Timestamp(6)
+  cover_art       String?
   artist          Artist      @relation(fields: [artist_id], references: [id])
   artist_id       Int         @unique
   soundtracks     Track[]
   record_label    RecordLabel @relation(fields: [record_label_id], references: [id])
   record_label_id Int         @unique
   created_at      DateTime    @default(now()) @db.Timestamp(6)
-  updated_at      DateTime    @updatedAt
+  updated_at      DateTime?    @updatedAt @db.Timestamp(6)
 }
 
 model Track {
   id         Int      @id @default(autoincrement())
   title      String
-  duration   Int
-  filename   String
-  album      Album    @relation(fields: [album_id], references: [id])
-  album_id   Int      @unique
+  duration   Int // in seconds
+  filename   String   @db.VarChar(255)
+  artist     Artist   @relation(fields: [artist_id], references: [id])
+  artist_id  Int      @unique
+  album      Album?   @relation(fields: [album_id], references: [id])
+  album_id   Int?     @unique
   created_at DateTime @default(now()) @db.Timestamp(6)
-  updated_at DateTime @updatedAt
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
 }
 
 model Tour {
   id         Int      @id @default(autoincrement())
   name       String   @db.VarChar(255)
-  start_date DateTime
-  end_date   DateTime
+  start_date DateTime @db.Timestamp(6)
+  end_date   DateTime @db.Timestamp(6)
   venue      Venue    @relation(fields: [venue_id], references: [id])
   venue_id   Int      @unique
   artist     Artist   @relation(fields: [artist_id], references: [id])
   artist_id  Int
   created_at DateTime @default(now()) @db.Timestamp(6)
-  updated_at DateTime @updatedAt
-  tourDateId Int
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
 }
 
 model Venue {
@@ -106,7 +109,7 @@ model Venue {
   country          String
   associated_tours Tour[]
   created_at       DateTime @default(now()) @db.Timestamp(6)
-  updated_at       DateTime @updatedAt
+  updated_at       DateTime? @updatedAt @db.Timestamp(6)
 }
 
 model Contract {
@@ -115,51 +118,52 @@ model Contract {
   artist_id       Int         @unique
   record_label    RecordLabel @relation(fields: [record_label_id], references: [id])
   record_label_id Int         @unique
-  start_date      DateTime
-  end_date        DateTime
+  start_date      DateTime    @db.Timestamp(6)
+  end_date        DateTime    @db.Timestamp(6)
   contract_terms  String
   created_at      DateTime    @default(now()) @db.Timestamp(6)
-  updated_at      DateTime    @updatedAt
+  updated_at      DateTime?    @updatedAt @db.Timestamp(6)
 }
 
 model Finance {
   id               Int      @id @default(autoincrement())
   artist           Artist   @relation(fields: [artist_id], references: [id])
-  artist_id        Int
+  artist_id        Int      @unique
   transaction_type String
-  amount           Decimal
+  amount           Decimal  @db.Decimal(1000, 2)
   description      String
   created_at       DateTime @default(now()) @db.Timestamp(6)
-  updated_at       DateTime @updatedAt
+  updated_at       DateTime? @updatedAt @db.Timestamp(6)
 }
 
 model SocialMedia {
   profile_id  Int      @id @default(autoincrement())
   artist      Artist   @relation(fields: [artist_id], references: [id])
-  artist_id   Int
+  artist_id   Int      @unique
   platform    String
   profile_url String
   created_at  DateTime @default(now()) @db.Timestamp(6)
-  updated_at  DateTime @updatedAt
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
 }
 
 model Merchandise {
   id          Int      @id @default(autoincrement())
   name        String
   description String
-  price       Decimal
+  price       Decimal  @db.Decimal(1000, 2)
   image       String?
   created_at  DateTime @default(now()) @db.Timestamp(6)
-  updated_at  DateTime @updatedAt
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
 }
 
 model Accolade {
   id             Int      @id @default(autoincrement())
-  award_name     String
-  award_category String
+  award_name     String   @db.VarChar(255)
+  award_category String   @db.VarChar(255)
   artist         Artist   @relation(fields: [artist_id], references: [id])
-  artist_id      Int
-  award_date     DateTime
+  artist_id      Int      @unique
+  award_date     DateTime @db.Timestamp(6)
   created_at     DateTime @default(now()) @db.Timestamp(6)
-  updated_at     DateTime @updatedAt
+  updated_at     DateTime? @updatedAt @db.Timestamp(6)
 }
+
