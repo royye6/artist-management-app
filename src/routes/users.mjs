@@ -11,36 +11,7 @@ import { newUserValidationSchema } from "../utils/validationSchemas.mjs";
 const router = Router();
 const prisma = new PrismaClient();
 
-// const findUserById = async (req, res, next) => {
-//     const id = parseInt(req.params.id);
-
-//     if (isNaN(id)) {
-//         return res.status(400).json({ error: "Invalid user ID!!" });
-//     }
-
-//     try {
-//         const user = await prisma.user.findUnique({
-//             where: { id: id },
-//         });
-
-//         if (!user) {
-//             return res.status(404).json({ error: "User not found" });
-//         }
-
-//         res.userId = user.id;
-//         next();
-//     } catch (err) {
-//         console.log(err);
-//         return res.sendStatus(500);
-//     }
-// };
-
-router.get("/api/v1/users", async (req, res) => {
-    const users = await prisma.user.findMany();
-    res.status(200).json(users);
-});
-
-router.get("/api/v1/users/:id", async (req, res) => {
+const findUserById = async (req, res, next) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
@@ -56,11 +27,22 @@ router.get("/api/v1/users/:id", async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        res.status(200).json(user);
+        req.userId = user.id;
+        req.user = user
+        next();
     } catch (err) {
         console.log(err);
         return res.sendStatus(500);
     }
+};
+
+router.get("/api/v1/users", async (req, res) => {
+    const users = await prisma.user.findMany();
+    res.status(200).json(users);
+});
+
+router.get("/api/v1/users/:id", findUserById, (req, res) => {
+    return res.status(200).json(req.user)
 });
 
 router.post(
@@ -70,7 +52,7 @@ router.post(
         const result = validationResult(req);
 
         if (!result.isEmpty()) {
-            res.status(400).send({ errors: result.array() });
+           return res.status(400).send({ errors: result.array() });
         }
 
         try {
@@ -98,11 +80,12 @@ router.patch(
 
         try {
             const data = matchedData(req);
+            const userId = req.userId;
             console.log(`from matchedData ${data}`);
 
             const updateUser = await prisma.user.update({
                 where: { id: userId },
-                data
+                data,
             });
             console.log(`from updateUser ${updateUser}`);
             return res.status(201).json(updateUser);
@@ -113,29 +96,18 @@ router.patch(
     }
 );
 
-router.delete("/api/v1/users/:id", (req, res) => {});
+router.delete("/api/v1/users/:id", findUserById, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const user = await prisma.user.delete({
+            where: { id: userId },
+        });
+        return res.status(201).send({ message: "User deleted successfully." });
+    } catch (err) {
+        console.log(err);
+        return res.sendStatus(500);
+    }
+});
 
 export default router;
 
-// router.patch(
-//     "/api/v1/users/:id",
-//     checkSchema(newUserValidationSchema),
-//     async (req, res) => {
-//         const result = validationResult(req);
-
-//         if (!result.isEmpty()) {
-//             res.status(400).send({ errors: result.array() });
-//         }
-
-//         try {
-//             const data = matchedData(req);
-//             console.log(data);
-//             const updateUser = await prisma.user.update({
-//                 where: { id: data.id },
-//             });
-//         } catch (err) {
-//             console.log(err);
-//             return res.sendStatus(500);
-//         }
-//     }
-// );
