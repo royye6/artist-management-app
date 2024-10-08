@@ -3,6 +3,9 @@ export const newUserValidationSchema = {
         notEmpty: {
             errorMessage: "First Name is required",
         },
+        isString: {
+            errorMessage: "First name must be a string",
+        },
         isLength: {
             options: {
                 min: 2,
@@ -15,6 +18,9 @@ export const newUserValidationSchema = {
     last_name: {
         notEmpty: {
             errorMessage: "Last Name is required",
+        },
+        isString: {
+            errorMessage: "Last name must be a string",
         },
         isLength: {
             options: {
@@ -29,18 +35,24 @@ export const newUserValidationSchema = {
         notEmpty: {
             errorMessage: "Username is required",
         },
+        isString: {
+            errorMessage: "Username must be a string",
+        },
         isLength: {
             options: {
                 min: 2,
                 max: 225,
             },
             errorMessage:
-                "Username must be at between 2 and 225 characters long",
+                "Username must be between 2 and 225 characters long",
         },
     },
     email: {
         notEmpty: {
             errorMessage: "Email is required",
+        },
+        isString: {
+            errorMessage: "Email must be a string",
         },
         isLength: {
             options: {
@@ -48,9 +60,6 @@ export const newUserValidationSchema = {
                 max: 225,
             },
             errorMessage: "Email must be at between 12 and 225 characters long",
-        },
-        isEmail: {
-            errorMessage: "Invalid email format",
         },
     },
     password: {
@@ -62,7 +71,7 @@ export const newUserValidationSchema = {
                 min: 8,
                 max: 225,
             },
-            errorMessage: "Email must be at between 8 and 225 characters long",
+            errorMessage: "Email must be between 8 and 225 characters long",
         },
     },
 };
@@ -71,6 +80,9 @@ export const newArtistValidationSchema = {
     first_name: {
         notEmpty: {
             errorMessage: "First Name is required",
+        },
+        isString: {
+            errorMessage: "First name must be a string",
         },
         isLength: {
             options: {
@@ -85,6 +97,9 @@ export const newArtistValidationSchema = {
         notEmpty: {
             errorMessage: "Last Name is required",
         },
+        isString: {
+            errorMessage: "Last name must be a string",
+        },
         isLength: {
             options: {
                 min: 2,
@@ -98,6 +113,9 @@ export const newArtistValidationSchema = {
         notEmpty: {
             errorMessage: "Stage Name is required",
         },
+        isString: {
+            errorMessage: "Stage name must be a string",
+        },
         isLength: {
             options: {
                 min: 2,
@@ -108,58 +126,233 @@ export const newArtistValidationSchema = {
         },
     },
     bio: {
+        optional: true,
         isString: {
-            errorMessage: "Biography must be a string value",
+            errorMessage: "Biography must be a string",
         },
     },
     image: {
+        optional: true,
         isString: {
-            errorMessage: "Image path must be a string value",
+            errorMessage: "Image path must be a string",
         },
     },
     genre: {
+        optional: true,
         isString: {
-            errorMessage: "Genre must be a string value",
+            errorMessage: "Genre must be a string",
+        },
+        isLength: {
+            options: {
+                max: 255,
+            },
+            errorMessage: "Genre must have a maximum of 255 characters",
         },
     },
     albums: {
-        isString: {
-            errorMessage: "Album names must be string values",
+        optional: true,
+        isArray: {
+            errorMessage: "Albums must be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All album IDs must be integers",
         },
     },
     tracks: {
-        isString: {
-            errorMessage: "Track names must be string values",
+        optional: true,
+        isArray: {
+            errorMessage: "Tracks must be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All track IDs must be integers",
         },
     },
     contract: {
-        isString: {
-            errorMessage: "Contract name must be a string value",
+        optional: true,
+        isArray: {
+            errorMessage: "Contracts must be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All contract IDs must be integers",
         },
     },
     music_tours: {
-        isString: {
-            errorMessage: "Music tour names must be string values",
+        optional: true,
+        isArray: {
+            errorMessage: "Music tours must be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All music tour IDs must be integers",
         },
     },
     transactions: {
-        isString: {
-            errorMessage: "Transaction type must be a string value",
+        optional: true,
+        isArray: {
+            errorMessage: "Transactions must be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All transaction IDs must be integers",
         },
     },
     accolades: {
-        isString: {
-            errorMessage: "Accolade names must be string values",
+        optional: true,
+        isArray: {
+            errorMessage: "Accolades must be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All accolade IDs must be integers",
         },
     },
     social_media_profiles: {
-        notEmpty: {
-            errorMessage: "Social-media profile urls are required",
+        optional: true,
+        isArray: {
+            errorMessage: "Social media profiles must be an array of integers",
         },
-        isString: "Social-media profile urls must be string values",
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All social media profile IDs must be integers",
+        },
     },
     record_label_id: {
-        isNumeric: "Record label ID must be an integer value",
+        optional: true,
+        isNumeric: {
+            errorMessage: "Record label ID must be an integer",
+        },
+    },
+};
+
+export const newRecordLabelValidationSchema = {
+    name: {
+        notEmpty: {
+            errorMessage: "Record Label name is required",
+        },
+        isString: {
+            errorMessage: "Record Label name must be a string",
+        },
+    },
+    website_url: {
+        optional: true,
+        isString: {
+            errorMessage: "Website URL must be a string",
+        },
+    },
+    address: {
+        notEmpty: {
+            errorMessage: "Address is required",
+        },
+        isString: {
+            errorMessage: "Address must be a string",
+        },
+    },
+    city: {
+        notEmpty: {
+            errorMessage: "City is required",
+        },
+        isString: {
+            errorMessage: "City must be a string",
+        },
+    },
+    state: {
+        notEmpty: {
+            errorMessage: "State is required",
+        },
+        isString: {
+            errorMessage: "State must be a string",
+        },
+    },
+    country: {
+        notEmpty: {
+            errorMessage: "Country is required",
+        },
+        isString: {
+            errorMessage: "Country must be a string",
+        },
+    },
+    signed_artists: {
+        optional: true,
+        isArray: {
+            errorMessage: "Signed artists must be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All artist IDs must be integers",
+        },
+    },
+    in_house_albums: {
+        optional: true,
+        isArray: {
+            errorMessage: "In-house albums must be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All album IDs must be integers",
+        },
+    },
+    contracts: {
+        optional: true,
+        isArray: {
+            errorMessage: "Contracts be an array of integers",
+        },
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All contract IDs must be integers",
+        },
     },
 };
 
@@ -169,7 +362,7 @@ export const newAlbumValidationSchema = {
             errorMessage: "Album title is required",
         },
         isString: {
-            errorMessage: "Album title must be a string value",
+            errorMessage: "Album title must be a string",
         },
     },
     release_date: {
@@ -177,12 +370,13 @@ export const newAlbumValidationSchema = {
             errorMessage: "Release date is required",
         },
         isString: {
-            errorMessage: "Date format must be string value YYYY/MM/DD",
+            errorMessage: "Date format must be string YYYY-MM-DD HH-MM-SS",
         },
     },
     cover_art: {
+        optional: true,
         isString: {
-            errorMessage: "File path must be a string value",
+            errorMessage: "File path must be a string",
         },
     },
     artist_id: {
@@ -190,23 +384,28 @@ export const newAlbumValidationSchema = {
             errorMessage: "Artist ID is required",
         },
         isNumeric: {
-            errorMessage: "Artist ID must be an integer value",
+            errorMessage: "Artist ID must be an integer",
         },
     },
     soundtracks: {
-        notEmpty: {
-            errorMessage: "Track title is required",
+        optional: true,
+        isArray: {
+            errorMessage: "Tracks must be an array of integers",
         },
-        isString: {
-            errorMessage: "Track titles must be string values",
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All track IDs must be integers",
         },
     },
     record_label_id: {
-        notEmpty: {
-            errorMessage: "Record label name is required",
-        },
-        isString: {
-            errorMessage: "Record label name must be a string value",
+        optional: true,
+        isNumeric: {
+            errorMessage: "Record label ID must be an integer",
         },
     },
 };
@@ -217,15 +416,15 @@ export const newContractValidationSchema = {
             errorMessage: "Artist ID is required",
         },
         isNumeric: {
-            errorMessage: "Artist ID must be an integer value",
+            errorMessage: "Artist ID must be an integer",
         },
     },
     record_label_id: {
         notEmpty: {
-            errorMessage: "Record label name is required",
+            errorMessage: "Record label is required",
         },
-        isString: {
-            errorMessage: "Record label name must be a string value",
+        isNumeric: {
+            errorMessage: "Record label ID must be an integer",
         },
     },
     start_date: {
@@ -233,7 +432,7 @@ export const newContractValidationSchema = {
             errorMessage: "Start date is required",
         },
         isString: {
-            errorMessage: "Date format must be string value YYYY/MM/DD",
+            errorMessage: "Date format must be string YYYY-MM-DD HH-MM-SS",
         },
     },
     end_date: {
@@ -241,15 +440,15 @@ export const newContractValidationSchema = {
             errorMessage: "End date is required",
         },
         isString: {
-            errorMessage: "Date format must be string value YYYY/MM/DD",
+            errorMessage: "Date format must be string YYYY-MM-DD HH-MM-SS",
         },
     },
     contract_terms: {
         notEmpty: {
-            errorMessage: "End date is required",
+            errorMessage: "Contract terms are required",
         },
         isString: {
-            errorMessage: "Contract terms must be a string value",
+            errorMessage: "Contract terms must be a string",
         },
     },
 };
@@ -260,7 +459,7 @@ export const newFinanceValidationSchema = {
             errorMessage: "Artist ID is required",
         },
         isNumeric: {
-            errorMessage: "Artist ID must be an integer value",
+            errorMessage: "Artist ID must be an integer",
         },
     },
     transaction_type: {
@@ -268,7 +467,7 @@ export const newFinanceValidationSchema = {
             errorMessage: "Transaction type is required",
         },
         isString: {
-            errorMessage: "Transaction type must be a string value",
+            errorMessage: "Transaction type must be a string",
         },
     },
     amount: {
@@ -276,7 +475,7 @@ export const newFinanceValidationSchema = {
             errorMessage: "Artist ID is required",
         },
         isNumeric: {
-            errorMessage: "Artist ID must be an integer value",
+            errorMessage: "Artist ID must be an integer",
         },
     },
     description: {
@@ -284,7 +483,7 @@ export const newFinanceValidationSchema = {
             errorMessage: "Description is required",
         },
         isString: {
-            errorMessage: "Desctiption must be a string value",
+            errorMessage: "Desctiption must be a string",
         },
     },
 };
@@ -295,7 +494,7 @@ export const newMerchValidationSchema = {
             errorMessage: "Merch name is required",
         },
         isString: {
-            errorMessage: "Merch name must be a string value",
+            errorMessage: "Merch name must be a string",
         },
     },
     description: {
@@ -303,7 +502,7 @@ export const newMerchValidationSchema = {
             errorMessage: "Description is required",
         },
         isString: {
-            errorMessage: "Description must be a string value",
+            errorMessage: "Description must be a string",
         },
     },
     price: {
@@ -311,12 +510,13 @@ export const newMerchValidationSchema = {
             errorMessage: "Price is required",
         },
         isNumeric: {
-            errorMessage: "Price must be an integer value",
+            errorMessage: "Price must be an integer",
         },
     },
     image: {
+        optional: true,
         isString: {
-            errorMessage: "Image path must be a string value",
+            errorMessage: "Image path must be a string",
         },
     },
 };
@@ -327,7 +527,7 @@ export const newSocialMediaProfileValidationSchema = {
             errorMessage: "Artist ID is required",
         },
         isNumeric: {
-            errorMessage: "Artist ID must be an integer value",
+            errorMessage: "Artist ID must be an integer",
         },
     },
     platform: {
@@ -335,12 +535,15 @@ export const newSocialMediaProfileValidationSchema = {
             errorMessage: "Platform name is required",
         },
         isString: {
-            errorMessage: "Platform name must be a string value",
+            errorMessage: "Platform name must be a string",
         },
     },
     profile_url: {
+        notEmpty: {
+            errorMessage: "Profile URL is required",
+        },
         isString: {
-            errorMessage: "Profile URL must be a string value",
+            errorMessage: "Profile URL must be a string",
         },
     },
 };
@@ -351,7 +554,7 @@ export const newTourValidationSchema = {
             errorMessage: "Tour name is required",
         },
         isString: {
-            errorMessage: "Tour name must be a string value",
+            errorMessage: "Tour name must be a string",
         },
         isLength: {
             options: {
@@ -367,7 +570,7 @@ export const newTourValidationSchema = {
             errorMessage: "Start date is required",
         },
         isString: {
-            errorMessage: "Date format must be string value YYYY/MM/DD",
+            errorMessage: "Date format must be string YYYY-MM-DD HH-MM-SS",
         },
     },
     end_date: {
@@ -375,7 +578,7 @@ export const newTourValidationSchema = {
             errorMessage: "End date is required",
         },
         isString: {
-            errorMessage: "Date format must be string value YYYY/MM/DD",
+            errorMessage: "Date format must be string YYYY-MM-DD HH-MM-SS",
         },
     },
     venue_id: {
@@ -383,7 +586,7 @@ export const newTourValidationSchema = {
             errorMessage: "Venue is required",
         },
         isNumeric: {
-            errorMessage: "Venue ID must be an integer value",
+            errorMessage: "Venue ID must be an integer",
         },
     },
     artist_id: {
@@ -391,7 +594,7 @@ export const newTourValidationSchema = {
             errorMessage: "Artist ID is required",
         },
         isNumeric: {
-            errorMessage: "Artist ID must be an integer value",
+            errorMessage: "Artist ID must be an integer",
         },
     },
 };
@@ -402,7 +605,7 @@ export const newTrackValidationSchema = {
             errorMessage: "Song title is required",
         },
         isString: {
-            errorMessage: "Song title must be a string value",
+            errorMessage: "Song title must be a string",
         },
     },
     duration: {
@@ -410,7 +613,7 @@ export const newTrackValidationSchema = {
             errorMessage: "Duration is required",
         },
         isNumeric: {
-            errorMessage: "Song duration must be an integer value (seconds)",
+            errorMessage: "Song duration must be an integer (seconds)",
         },
     },
     filename: {
@@ -418,7 +621,7 @@ export const newTrackValidationSchema = {
             errorMessage: "Song title is required",
         },
         isString: {
-            errorMessage: "Song title must be a string value",
+            errorMessage: "Song title must be a string",
         },
     },
     artist_id: {
@@ -426,12 +629,13 @@ export const newTrackValidationSchema = {
             errorMessage: "Artist ID is required",
         },
         isNumeric: {
-            errorMessage: "Artist ID must be an integer value",
+            errorMessage: "Artist ID must be an integer",
         },
     },
     album_id: {
+        optional: true,
         isNumeric: {
-            errorMessage: "Album ID must be an integer value",
+            errorMessage: "Album ID must be an integer",
         },
     },
 };
@@ -442,12 +646,13 @@ export const newVenueValidationSchema = {
             errorMessage: "Name name is required",
         },
         isString: {
-            errorMessage: "Venue name must be a string value",
+            errorMessage: "Venue name must be a string",
         },
     },
     website_url: {
+        optional: true,
         isString: {
-            errorMessage: "Website URL must be a string value",
+            errorMessage: "Website URL must be a string",
         },
     },
     address: {
@@ -455,7 +660,7 @@ export const newVenueValidationSchema = {
             errorMessage: "Address is required",
         },
         isString: {
-            errorMessage: "Address must be a string value",
+            errorMessage: "Address must be a string",
         },
     },
     city: {
@@ -463,7 +668,7 @@ export const newVenueValidationSchema = {
             errorMessage: "City is required",
         },
         isString: {
-            errorMessage: "City must be a string value",
+            errorMessage: "City must be a string",
         },
     },
     state: {
@@ -471,7 +676,7 @@ export const newVenueValidationSchema = {
             errorMessage: "State is required",
         },
         isString: {
-            errorMessage: "State must be a string value",
+            errorMessage: "State must be a string",
         },
     },
     country: {
@@ -479,15 +684,22 @@ export const newVenueValidationSchema = {
             errorMessage: "Country is required",
         },
         isString: {
-            errorMessage: "Country must be a string value",
+            errorMessage: "Country must be a string",
         },
     },
     associated_tours: {
-        notEmpty: {
-            errorMessage: "Associated tour is required",
+        optional: true,
+        isArray: {
+            errorMessage: "Tours must be an array of integers",
         },
-        isNumeric: {
-            errorMessage: "Tour ID must be an integer value",
+        custom: {
+            options: (value) => {
+                return (
+                    Array.isArray(value) &&
+                    value.every((item) => typeof item === "number")
+                );
+            },
+            errorMessage: "All tour IDs must be integers",
         },
     },
 };
@@ -498,7 +710,7 @@ export const newAccoladeValidationSchema = {
             errorMessage: "Award name is required",
         },
         isString: {
-            errorMessage: "Award name must be a string value",
+            errorMessage: "Award name must be a string",
         },
         isLength: {
             options: {
@@ -514,7 +726,7 @@ export const newAccoladeValidationSchema = {
             errorMessage: "Category name is required",
         },
         isString: {
-            errorMessage: "Category name must be a string value",
+            errorMessage: "Category name must be a string",
         },
         isLength: {
             options: {
@@ -534,8 +746,9 @@ export const newAccoladeValidationSchema = {
         },
     },
     award_date: {
+        optional: true,
         isString: {
-            errorMessage: "Date format must be string value YYYY/MM/DD",
+            errorMessage: "Date format must be string YYYY-MM-DD HH-MM-SS",
         },
     },
 };

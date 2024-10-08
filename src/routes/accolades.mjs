@@ -33,11 +33,11 @@ const findAccoladeById = async (req, res, next) => {
 
 router.get("/api/v1/accolades", async (req, res) => {
     const accolades = await prisma.accolade.findMany();
-    res.json(accolades);
+    return res.json(accolades);
 });
 
 router.get("/api/v1/accolades/:id", findAccoladeById, (req, res) => {
-    res.status(200).json(accolade);
+    res.status(200).json(req.accolade);
 });
 
 router.post(
@@ -47,7 +47,7 @@ router.post(
         const result = validationResult(req);
 
         if (!result.isEmpty()) {
-            res.status(400).send({ errors: result.array() });
+            return res.status(400).send({ errors: result.array() });
         }
 
         try {
@@ -69,7 +69,7 @@ router.patch(
         const result = validationResult(req);
 
         if (!result.isEmpty()) {
-            res.status(400).send({ errors: result.array()})
+            return res.status(400).send({ errors: result.array()})
         }
 
         try {

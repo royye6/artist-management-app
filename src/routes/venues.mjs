@@ -44,6 +44,8 @@ router.post(
     "/api/v1/venues",
     checkSchema(newVenueValidationSchema),
     async (req, res) => {
+        const result = validationResult(req);
+        
         if (!result.isEmpty()) {
             return res.status(400).send({ errors: result.array() });
         }

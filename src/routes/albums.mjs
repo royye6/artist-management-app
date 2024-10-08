@@ -52,7 +52,18 @@ router.post(
 
         try {
             const data = matchedData(req);
-            const newAlbum = await prisma.album.create({ data: data });
+            const postData = {
+                ...data,
+                soundtracks: data.soundtracks
+                    ? {
+                          connect: data.soundtracks.map((id) => ({ id })),
+                      }
+                    : undefined,
+                artist_id: data.artist_id,
+                record_label: data.record_label
+            };
+
+            const newAlbum = await prisma.album.create({ data: postData });
             return res.status(201).json(newAlbum);
         } catch (err) {
             console.log(err);
@@ -75,10 +86,20 @@ router.patch(
         try {
             const data = matchedData(req);
             const albumId = req.albumId;
+            const patchData = {
+                ...data,
+                soundtracks: data.soundtracks
+                    ? {
+                          connect: data.soundtracks.map((id) => ({ id })),
+                      }
+                    : undefined,
+                artist_id: data.artist_id,
+                record_label: data.record_label,
+            };
 
             const updateAlbum = await prisma.album.update({
                 where: { id: albumId },
-                data,
+                data: patchData
             });
             return res.status(201).json(updateAlbum);
         } catch (err) {

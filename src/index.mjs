@@ -6,11 +6,14 @@ import artistsRouter from "./routes/artists.mjs";
 import contractsRouter from "./routes/contracts.mjs";
 import financeRouter from "./routes/finance.mjs";
 import merchRouter from "./routes/merch.mjs";
+import recordLabelsRouter from "./routes/record-label.mjs";
 import socialMediaRouter from "./routes/social-media.mjs";
 import toursRouter from "./routes/tours.mjs";
 import tracksRouter from "./routes/tracks.mjs";
 import usersRouter from "./routes/users.mjs";
 import venuesRouter from "./routes/venues.mjs";
+import swaggerSpec from "./swagger.mjs";
+import swaggerUi from "swagger-ui-express"
 
 // const prisma = new PrismaClient();
 const app = express();
@@ -24,12 +27,15 @@ app.use(artistsRouter);
 app.use(contractsRouter);
 app.use(financeRouter);
 app.use(merchRouter);
+app.use(recordLabelsRouter);
 app.use(socialMediaRouter);
 app.use(toursRouter);
 app.use(tracksRouter);
 app.use(tracksRouter);
 app.use(usersRouter);
 app.use(venuesRouter);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
