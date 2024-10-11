@@ -502,6 +502,56 @@ const swaggerSpec = swaggerJsdoc({
             version: "1.0.0",
             description: "The backend for an artist management platform",
         },
+        tags: [
+            {
+                name: "Users",
+                description: "Operations related to users",
+            },
+            {
+                name: "Artists",
+                description: "Operations related to artists",
+            },
+            {
+                name: "Albums",
+                description: "Operations related to albums",
+            },
+            {
+                name: "Tracks",
+                description: "Operations related to tracks",
+            },
+            {
+                name: "Record Labels",
+                description: "Operations related to record labels",
+            },
+            {
+                name: "Tours",
+                description: "Operations related to tours",
+            },
+            {
+                name: "Venues",
+                description: "Operations related to venues",
+            },
+            {
+                name: "Contracts",
+                description: "Operations related to contracts",
+            },
+            {
+                name: "Finance",
+                description: "Operations related to finance",
+            },
+            {
+                name: "Social Media",
+                description: "Operations related to social media",
+            },
+            {
+                name: "Merch",
+                description: "Operations related to merch",
+            },
+            {
+                name: "Accolades",
+                description: "Operations related to accolades",
+            },
+        ],
     },
     apis: [`${__dirname}/routes/*.mjs`, `${__dirname}/swagger.mjs`],
 });

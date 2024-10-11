@@ -31,14 +31,100 @@ const findTourById = async (req, res, next) => {
     }
 };
 
+/**
+ * @swagger
+ * /api/v1/tours:
+ *   get:
+ *     tags: [Tours]
+ *     summary: Retrieve a list of tours
+ *     description: Fetches all tours from the database.
+ *     responses:
+ *       '200':
+ *         description: A list of tours.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Tour'
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get("/api/v1/tours", async (req, res) => {
     const tours = await prisma.tour.findMany();
     res.json(tours);
 });
 
+/**
+ * @swagger
+ * /api/v1/tours/{id}:
+ *   get:
+ *     tags: [Tours]
+ *     summary: Retrieve a tour by ID
+ *     description: Fetches a tour from the database using its ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the tour to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: A tour object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Tour'
+ *       '404':
+ *         description: Tour not found.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get("/api/v1/tours/:id", findTourById, (req, res) => {
     return res.status(200).json(req.tour);
 });
+
+/**
+ * @swagger
+ * /api/v1/tours:
+ *   post:
+ *     tags: [Tours]
+ *     summary: Create a new tour
+ *     description: Adds a new tour to the database.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               start_date:
+ *                 type: string
+ *                 example: "2024-03-01T00:00:00Z"
+ *               end_date:
+ *                 type: string
+ *                 example: "2024-08-30T00:00:00Z"
+ *               venue_id:
+ *                 type: integer
+ *               artist_id:
+ *                 type: integer
+ *     responses:
+ *       '201':
+ *         description: Tour created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Tour'
+ *       '400':
+ *         description: Invalid input.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.post(
     "/api/v1/tours",
@@ -61,6 +147,54 @@ router.post(
         }
     }
 );
+
+/**
+ * @swagger
+ * /api/v1/tours/{id}:
+ *   patch:
+ *     tags: [Tours]
+ *     summary: Update an existing tour
+ *     description: Modifies an existing tour in the database.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the tour to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               start_date:
+ *                 type: string
+ *                 example: "2024-03-01T00:00:00Z"
+ *               end_date:
+ *                 type: string
+ *                 example: "2024-08-30T00:00:00Z"
+ *               venue_id:
+ *                 type: integer
+ *               artist_id:
+ *                 type: integer
+ *     responses:
+ *       '200':
+ *         description: Tour updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Tour'
+ *       '400':
+ *         description: Invalid input.
+ *       '404':
+ *         description: Tour not found.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.patch(
     "/api/v1/tours/:id",
@@ -89,6 +223,29 @@ router.patch(
         }
     }
 );
+
+/**
+ * @swagger
+ * /api/v1/tours/{id}:
+ *   delete:
+ *     tags: [Tours]
+ *     summary: Delete a tour
+ *     description: Removes a tour from the database.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the tour to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Tour deleted successfully.
+ *       '404':
+ *         description: Tour not found.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.delete("/api/v1/tours/:id", findTourById, async (req, res) => {
     try {

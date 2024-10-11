@@ -28,7 +28,7 @@ const findUserById = async (req, res, next) => {
         }
 
         req.userId = user.id;
-        req.user = user
+        req.user = user;
         next();
     } catch (err) {
         console.log(err);
@@ -36,14 +36,100 @@ const findUserById = async (req, res, next) => {
     }
 };
 
+/**
+ * @swagger
+ * /api/v1/users:
+ *   get:
+ *     tags: [Users]
+ *     summary: Retrieve a list of users
+ *     description: Fetches all users from the database.
+ *     responses:
+ *       '200':
+ *         description: A list of users.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       '500':
+ *         description: Internal server error
+ */
+
 router.get("/api/v1/users", async (req, res) => {
     const users = await prisma.user.findMany();
     res.status(200).json(users);
 });
 
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   get:
+ *     tags: [Users]
+ *     summary: Retrieve a user by ID
+ *     description: Fetches a user from the database using their ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: A user object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       '404':
+ *         description: User not found.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get("/api/v1/users/:id", findUserById, (req, res) => {
-    return res.status(200).json(req.user)
+    return res.status(200).json(req.user);
 });
+
+/**
+ * @swagger
+ * /api/v1/users:
+ *   post:
+ *     tags: [Users]
+ *     summary: Create a new user
+ *     description: Adds a new user to the database.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: User created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       '400':
+ *         description: Invalid input.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.post(
     "/api/v1/users",
@@ -52,7 +138,7 @@ router.post(
         const result = validationResult(req);
 
         if (!result.isEmpty()) {
-           return res.status(400).send({ errors: result.array() });
+            return res.status(400).send({ errors: result.array() });
         }
 
         try {
@@ -66,6 +152,54 @@ router.post(
         }
     }
 );
+
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   patch:
+ *     tags: [Users]
+ *     summary: Update an existing user
+ *     description: Modifies an existing user in the database.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: User updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       '400':
+ *         description: Invalid input.
+ *       '404':
+ *         description: User not found.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.patch(
     "/api/v1/users/:id",
@@ -96,6 +230,29 @@ router.patch(
     }
 );
 
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   delete:
+ *     tags: [Users]
+ *     summary: Delete a user
+ *     description: Removes a user from the database.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: User deleted successfully.
+ *       '404':
+ *         description: User not found.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.delete("/api/v1/users/:id", findUserById, async (req, res) => {
     try {
         const userId = req.userId;
@@ -110,4 +267,3 @@ router.delete("/api/v1/users/:id", findUserById, async (req, res) => {
 });
 
 export default router;
-

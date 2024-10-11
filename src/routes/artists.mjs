@@ -31,14 +31,102 @@ const findArtistById = async (req, res, next) => {
     }
 };
 
+/**
+ * @swagger
+ * /api/v1/artists:
+ *   get:
+ *     tags: [Artists]
+ *     summary: Retrieve a list of artists
+ *     description: Fetches all artists from the database.
+ *     responses:
+ *       '200':
+ *         description: A list of artists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Artist'
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get("/api/v1/artists", async (req, res) => {
     const artists = await prisma.artist.findMany();
     res.json(artists);
 });
 
+/**
+ * @swagger
+ * /api/v1/artists/{id}:
+ *   get:
+ *     tags: [Artists]
+ *     summary: Retrieve an artist by ID
+ *     description: Fetches an artist from the database using its ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the artist to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: An artist object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Artist'
+ *       '404':
+ *         description: Artist not found.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get("/api/v1/artists/:id", findArtistById, (req, res) => {
     res.status(200).json(req.artist);
 });
+
+/**
+ * @swagger
+ * /api/v1/artists:
+ *   post:
+ *     tags: [Artists]
+ *     summary: Create a new artist
+ *     description: Adds a new artist to the database.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               stage_name:
+ *                 type: string
+ *               bio:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               record_label_id:
+ *                 type: integer
+ *     responses:
+ *       '201':
+ *         description: Artist created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Artist'
+ *       '400':
+ *         description: Invalid input.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.post(
     "/api/v1/artists",
@@ -60,6 +148,56 @@ router.post(
         }
     }
 );
+
+/**
+ * @swagger
+ * /api/v1/artists/{id}:
+ *   patch:
+ *     tags: [Artists]
+ *     summary: Update an existing artist
+ *     description: Modifies an existing artist in the database.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the artist to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               stage_name:
+ *                 type: string
+ *               bio:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               record_label_id:
+ *                 type: integer
+ *     responses:
+ *       '200':
+ *         description: Artist updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Artist'
+ *       '400':
+ *         description: Invalid input.
+ *       '404':
+ *         description: Artist not found.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.patch(
     "/api/v1/artists/:id",
@@ -87,6 +225,29 @@ router.patch(
         }
     }
 );
+
+/**
+ * @swagger
+ * /api/v1/artists/{id}:
+ *   delete:
+ *     tags: [Artists]
+ *     summary: Delete an artist
+ *     description: Removes an artist from the database.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the artist to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Artist deleted successfully.
+ *       '404':
+ *         description: Artist not found.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.delete("/api/v1/artists/:id", findArtistById, async (req, res) => {
     try {

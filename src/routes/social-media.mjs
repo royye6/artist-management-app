@@ -31,14 +31,95 @@ const findProfileById = async (req, res, next) => {
     }
 };
 
+/**
+ * @swagger
+ * /api/v1/social-media:
+ *   get:
+ *     tags: [Social Media]
+ *     summary: Retrieve a list of social media profiles
+ *     description: Fetches all social media profiles from the database.
+ *     responses:
+ *       '200':
+ *         description: A list of social media profiles.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/SocialMedia'
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get("/api/v1/social-media", async (req, res) => {
     const socialMediaProfiles = await prisma.socialmedia.findMany();
     res.json(socialMediaProfiles);
 });
 
+/**
+ * @swagger
+ * /api/v1/social-media/{id}:
+ *   get:
+ *     tags: [Social Media]
+ *     summary: Retrieve social media profile by ID
+ *     description: Fetches a social media profile from the database using its ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the social media profile to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: A social media profile object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SocialMedia'
+ *       '404':
+ *         description: Social media profile not found.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get("/api/v1/social-media/:id", findProfileById, (req, res) => {
     return res.status(200).json(req.profile);
 });
+
+/**
+ * @swagger
+ * /api/v1/social-media:
+ *   post:
+ *     tags: [Social Media]
+ *     summary: Create new social media profile
+ *     description: Adds a new social media profile to the database.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               artist_id:
+ *                 type: integer
+ *               platform:
+ *                 type: string
+ *               profile_url:
+ *                 type: string
+ *                 example: "https://x.com/exampleartist"
+ *     responses:
+ *       '201':
+ *         description: Social media profile created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SocialMedia'
+ *       '400':
+ *         description: Invalid input.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.post(
     "/api/v1/social-media",
@@ -61,6 +142,49 @@ router.post(
         }
     }
 );
+
+/**
+ * @swagger
+ * /api/v1/social-media/{id}:
+ *   patch:
+ *     tags: [Social Media]
+ *     summary: Update an existing social media profile
+ *     description: Modifies an existing social media profile in the database.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the social media profile to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               artist_id:
+ *                 type: integer
+ *               platform:
+ *                 type: string
+ *               profile_url:
+ *                 type: string
+ *                 example: "https://x.com/exampleartist"
+ *     responses:
+ *       '200':
+ *         description: Social media profile updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SocialMedia'
+ *       '400':
+ *         description: Invalid input.
+ *       '404':
+ *         description: Social media profile not found.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.patch(
     "/api/v1/social-media/:id",
@@ -89,6 +213,29 @@ router.patch(
         }
     }
 );
+
+/**
+ * @swagger
+ * /api/v1/social-media/{id}:
+ *   delete:
+ *     tags: [Social Media]
+ *     summary: Delete a social media profile
+ *     description: Removes a social media profile from the database.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the social media profile to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Social media profile deleted successfully.
+ *       '404':
+ *         description: Social media profile not found.
+ *       '500':
+ *         description: Internal server error.
+ */
 
 router.delete("/api/v1/social-media/:id", findProfileById, async (req, res) => {
     try {

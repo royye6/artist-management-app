@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.mjs",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "nodemon ./src/index.mjs",
         "start": "node ./src/index.mjs",
+        "prisma migrate dev": "docker exec artist_management_app_app_1 npx prisma migrate dev",
         "generate": "npx prisma generate"
     },
     "keywords": [],
@@ -14,8 +14,10 @@
     "license": "ISC",
     "dependencies": {
         "@prisma/client": "^5.20.0",
+        "cors": "^2.8.5",
         "express": "^4.21.0",
         "express-validator": "^7.2.0",
+        "pg": "^8.13.0",
         "prisma": "^5.20.0",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-express": "^4.1.2"
